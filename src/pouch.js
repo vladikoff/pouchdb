@@ -419,25 +419,27 @@ Pouch.Errors = {
 Pouch.error = function(error, reason){
  return extend({}, error, {reason: reason});
 };
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined' && module.exports && typeof global !== 'undefined') {
   global.Pouch = Pouch;
   global.PouchDB = Pouch;
-  Pouch.merge = require('./pouch.merge.js').merge;
-  Pouch.collate = require('./pouch.collate.js').collate;
-  Pouch.replicate = require('./pouch.replicate.js').replicate;
-  Pouch.utils = require('./pouch.utils.js');
+  Pouch.merge = require('./pouch.merge.js' + '').merge;
+  Pouch.collate = require('./pouch.collate.js' + '').collate;
+  Pouch.replicate = require('./pouch.replicate.js' + '').replicate;
+  Pouch.utils = require('./pouch.utils.js' + '');
   extend = Pouch.utils.extend;
   module.exports = Pouch;
-  var PouchAdapter = require('./pouch.adapter.js');
+  var PouchAdapter = require('./pouch.adapter.js' + '');
   //load adapters known to work under node
   var adapters = ['leveldb', 'http'];
   adapters.map(function(adapter) {
     var adapter_path = './adapters/pouch.'+adapter+'.js';
     require(adapter_path);
   });
-  require('./plugins/pouchdb.mapreduce.js');
-  require('./deps/uuid.js');
-} else {
+  require('./plugins/pouchdb.mapreduce.js' + '');
+  require('./deps/uuid.js' + '');
+} else if (typeof window !== 'undefined') {
   window.Pouch = Pouch;
-  window.PouchDB = Pouch;
+} else {
+  module.exports.Pouch = Pouch;
+  module.exports.PouchDB = Pouch;
 }

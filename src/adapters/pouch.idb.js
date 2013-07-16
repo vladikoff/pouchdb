@@ -3,25 +3,39 @@
 
 'use strict';
 
-// While most of the IDB behaviors match between implementations a
-// lot of the names still differ. This section tries to normalize the
-// different objects & methods.
-var indexedDB = window.indexedDB ||
-  window.mozIndexedDB ||
-  window.webkitIndexedDB;
+var indexedDB,
+  IDBTransaction,
+  IDBKeyRange;
 
-// still needed for R/W transactions in Android Chrome. follow MDN example:
-// https://developer.mozilla.org/en-US/docs/IndexedDB/IDBDatabase#transaction
-// note though that Chrome Canary fails on undefined READ_WRITE constants
-// on the native IDBTransaction object
-var IDBTransaction = (window.IDBTransaction && window.IDBTransaction.READ_WRITE) ?
-  window.IDBTransaction :
-  (window.webkitIDBTransaction && window.webkitIDBTransaction.READ_WRITE) ?
-    window.webkitIDBTransaction :
+
+
+if (typeof window !== 'undefined') {
+  // While most of the IDB behaviors match between implementations a
+  // lot of the names still differ. This section tries to normalize the
+  // different objects & methods.
+  var indexedDB = window.indexedDB ||
+    window.mozIndexedDB ||
+    window.webkitIndexedDB;
+
+  // still needed for R/W transactions in Android Chrome. follow MDN example:
+  // https://developer.mozilla.org/en-US/docs/IndexedDB/IDBDatabase#transaction
+  // note though that Chrome Canary fails on undefined READ_WRITE constants
+  // on the native IDBTransaction object
+  var IDBTransaction = (window.IDBTransaction && window.READ_WRITE) ?
+    window.IDBTransaction :
+    (window.webkitIDBTransaction && window.webkitREAD_WRITE) ?
+      window.webkitIDBTransaction :
     { READ_WRITE: 'readwrite' };
 
-var IDBKeyRange = window.IDBKeyRange ||
-  window.webkitIDBKeyRange;
+  var IDBKeyRange = window.IDBKeyRange ||
+    window.webkitIDBKeyRange;
+} else { // Firefox chrome environment
+  indexedDB = require('indexed-db').indexedDB;
+  IDBTransaction = require('indexed-db').IDBTransaction;
+  IDBKeyRange = require('indexed-db').IDBKeyRange;
+}
+
+var READ_WRITE = IDBTransaction.READ_WRITE || "readwrite";
 
 var idbError = function(callback) {
   return function(event) {
@@ -113,7 +127,7 @@ var IdbPouch = function(opts, callback) {
     idb = e.target.result;
 
     var txn = idb.transaction([META_STORE, DETECT_BLOB_SUPPORT_STORE],
-                              IDBTransaction.READ_WRITE);
+                              READ_WRITE);
 
     idb.onversionchange = function() {
       idb.close();
@@ -421,7 +435,7 @@ var IdbPouch = function(opts, callback) {
     var txn;
     preprocessAttachments(function() {
       txn = idb.transaction([DOC_STORE, BY_SEQ_STORE, ATTACH_STORE, META_STORE],
-                            IDBTransaction.READ_WRITE);
+                            READ_WRITE);
       txn.onerror = idbError(callback);
       txn.ontimeout = idbError(callback);
       txn.oncomplete = complete;
@@ -821,7 +835,7 @@ var IdbPouch = function(opts, callback) {
   // which are listed in revs and sets this document
   // revision to to rev_tree
   api._doCompaction = function(docId, rev_tree, revs, callback) {
-    var txn = idb.transaction([DOC_STORE, BY_SEQ_STORE], IDBTransaction.READ_WRITE);
+    var txn = idb.transaction([DOC_STORE, BY_SEQ_STORE], READ_WRITE);
 
     var index = txn.objectStore(DOC_STORE);
     index.get(docId).onsuccess = function(event) {

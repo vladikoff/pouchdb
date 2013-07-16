@@ -44,9 +44,16 @@ var ajax = function ajax(options, callback) {
     } catch(e){}
     call(cb, errObj);
   };
+  var xhr;
   if (typeof window !== 'undefined' && window.XMLHttpRequest) {
+    xhr = new XMLHttpRequest();
+  } else if (typeof module !== 'undefined' && module.exports && typeof global === 'undefined') {
+    var xmlhttprequest = require("sdk/net/xhr").XMLHttpRequest;
+    xhr = new xmlhttprequest();
+  }
+  if (typeof xhr !== 'undefined') {
     var timer,timedout  = false;
-    var xhr = new XMLHttpRequest();
+
     xhr.open(options.method, options.url);
     if (options.json) {
       options.headers.Accept = 'application/json';
@@ -74,7 +81,12 @@ var ajax = function ajax(options, callback) {
       if (xhr.readyState !== 4 || timedout) {
         return;
       }
-      clearTimeout(timer);
+      if (typeof clearTimeout === 'undefined') {
+        timer = require('timers').clearTimeout(timer);
+      }
+      else {
+        clearTimeout(timer);
+      }
       if (xhr.status >= 200 && xhr.status < 300) {
         var data;
         if (options.binary) {
@@ -88,7 +100,12 @@ var ajax = function ajax(options, callback) {
       }
     };
     if (options.timeout > 0) {
-      timer = setTimeout(abortReq, options.timeout);
+      if (typeof setTimeout === 'undefined') {
+        timer = require('timers').setTimeout(abortReq, options.timeout);
+      }
+      else {
+        timer = setTimeout(abortReq, options.timeout);
+      }
     }
     xhr.send(options.body);
     return {abort:abortReq};

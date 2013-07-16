@@ -694,4 +694,6 @@ webSqlPouch.destroy = function(name, callback) {
 
 webSqlPouch.Changes = new Changes();
 
-Pouch.adapter('websql', webSqlPouch);
+if (typeof window !== 'undefined') {
+  Pouch.adapter('websql', webSqlPouch);
+}
