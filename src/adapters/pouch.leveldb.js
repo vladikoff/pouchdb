@@ -11,7 +11,7 @@ var path = require('path');
 var fs = require('fs');
 var crypto = require('crypto');
 var EventEmitter = require('events').EventEmitter;
-var levelup = require('levelup');
+var levelup = require('level');
 
 var error = function(callback, message) {
   return process.nextTick(function() {
@@ -151,13 +151,23 @@ var LevelPouch = function(opts, callback) {
     return opts.name;
   };
 
-  api._info = function(callback) {
-    return call(callback, null, {
-      db_name: opts.name,
-      doc_count: doc_count,
-      update_seq: update_seq
-    });
-  };
+
+   api._info = function(callback) {
+
+     stores[BY_SEQ_STORE].get(DOC_COUNT_KEY, function(err, _doc_count) {
+       if (err) { _doc_count = doc_count; }
+
+       stores[BY_SEQ_STORE].get(UPDATE_SEQ_KEY, function(err, _update_seq) {
+         if (err) { _update_seq = update_seq; }
+
+         return call(callback, null, {
+           db_name: opts.name,
+           doc_count: _doc_count,
+           update_seq: _update_seq
+         });
+       });
+     });
+   };
 
   api._get = function(id, opts, callback) {
     stores[DOC_STORE].get(id, function(err, metadata) {
