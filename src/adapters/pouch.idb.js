@@ -30,9 +30,8 @@ if (typeof window !== 'undefined') {
   var IDBKeyRange = window.IDBKeyRange ||
     window.webkitIDBKeyRange;
 } else { // Firefox chrome environment
-  indexedDB = require('indexed-db').indexedDB;
-  IDBTransaction = require('indexed-db').IDBTransaction;
-  IDBKeyRange = require('indexed-db').IDBKeyRange;
+
+
 }
 
 var READ_WRITE = IDBTransaction.READ_WRITE || "readwrite";

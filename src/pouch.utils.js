@@ -4,23 +4,6 @@
 /*global chrome*/
 
 
-// btoa and atob aren't in the jetpack top level scope
-if (typeof btoa === 'undefined') {
-  btoa = require("sdk/base64").encode;
-}
-
-if (typeof atob === 'undefined') {
-  atob = require("sdk/base64").decode;
-}
-
-if (typeof setTimeout === 'undefined') {
-  setTimeout = require('timers').setTimeout;
-}
-
-if (typeof clearTimeout === 'undefined') {
-  clearTimeout = require('timers').clearTimeout;
-}
-
 // Pretty dumb name for a function, just wraps callback calls so we dont
 // to if (callback) callback() everywhere
 var call = function(fun) {
