@@ -49,6 +49,15 @@ module.exports = function(grunt) {
       "node-qunit": ["./testdb_*"]
     },
 
+    'copy': {
+      firefox: {
+        expand: true,
+        cwd: 'src/gecko/xpcom',
+        src: ['**'],
+        dest: 'dist/gecko/pouchdb/'
+      }
+    },
+
     'concat': {
       options: {
         banner: fileHeader + '\n(function() {\n ',
@@ -71,6 +80,22 @@ module.exports = function(grunt) {
           "src/deps/polyfill.js", "src/deps/extend.js","src/deps/ajax.js", srcFiles
         ]),
         dest: 'dist/pouchdb-nightly.js'
+      },
+      firefox: {
+        options: {
+          banner: '',
+          footer: ''
+        },
+        src: grunt.util._.flatten([
+          "src/deps/gecko.js",
+          "src/deps/uuid.js",
+          "src/deps/md5.js",
+          "src/deps/polyfill.js",
+          "src/deps/extend.js",
+          "src/deps/ajax.js",
+          srcFiles
+        ]),
+        dest: 'dist/gecko/pouchdb/chrome/content/pouchdb.jsm'
       },
       spatial: {
         src: grunt.util._.flatten([
@@ -255,8 +280,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask("build", ["concat:amd", "concat:all" , "uglify:dist"]);
+  grunt.registerTask("build:firefox", ["clean", "copy:firefox", "concat:firefox"]);
   grunt.registerTask("browser", ["connect", "cors-server", "forever"]);
   grunt.registerTask("full", ["concat", "uglify"]);
 
