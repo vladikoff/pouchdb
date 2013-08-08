@@ -39,7 +39,7 @@ let principal = Cc["@mozilla.org/scriptsecuritymanager;1"].
   getService(Ci.nsIScriptSecurityManager).
   getCodebasePrincipal(principaluri);
 
-var indexedDB = dbContext.indexedDB;
+indexedDB = dbContext.indexedDB;
 
 indexedDB = Object.freeze({
   open: indexedDB.openForPrincipal.bind(indexedDB, principal),
