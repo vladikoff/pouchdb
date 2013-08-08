@@ -3,7 +3,8 @@ pouchdb_firefox_component
 
 ### Build
 
-* Build this component using `grunt build:firefox` in PouchDB
+* Build this component using `grunt build:firefox` in PouchDB or 
+download it from https://github.com/vladikoff/pouchdb/releases (`firefox_component` branch releases)
 * Copy the `dist/gecko/pouchdb` directory into `(mozilla-central)/browser/components`
 * Edit `moz.build` in  `(mozilla-central)/browser/components`, add `pouchdb` to `PARALLEL_DIRS` in that file.
 * Compile Firefox (`./mach build`)
