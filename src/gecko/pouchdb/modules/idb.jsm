@@ -46,5 +46,5 @@ indexedDB = Object.freeze({
   deleteDatabase: indexedDB.deleteForPrincipal.bind(indexedDB, principal),
   cmp: indexedDB.cmp
 });
-var IDBTransaction = Ci.nsIIDBTransaction;
-var IDBKeyRange = dbContext.IDBKeyRange;
+IDBTransaction = Ci.nsIIDBTransaction;
+IDBKeyRange = dbContext.IDBKeyRange;
