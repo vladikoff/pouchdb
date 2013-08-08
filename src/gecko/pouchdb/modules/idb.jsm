@@ -4,8 +4,8 @@ var EXPORTED_SYMBOLS = ['indexedDB', 'IDBTransaction', 'IDBKeyRange'];
 // database context for indexedDB
 var dbContext = this;
 
-// TODO
-const id = "testing";
+// Need a unique ID here, in addon extensions this uses addon id.
+const id = new Date().getTime() + "";
 
 // placeholder, copied from bootstrap.js
 let sanitizeId = function(id){
@@ -38,14 +38,13 @@ let principaluri = Cc["@mozilla.org/network/io-service;1"].
 let principal = Cc["@mozilla.org/scriptsecuritymanager;1"].
   getService(Ci.nsIScriptSecurityManager).
   getCodebasePrincipal(principaluri);
-/////////////////////
 
-indexedDB = dbContext.indexedDB;
+var indexedDB = dbContext.indexedDB;
 
 indexedDB = Object.freeze({
   open: indexedDB.openForPrincipal.bind(indexedDB, principal),
   deleteDatabase: indexedDB.deleteForPrincipal.bind(indexedDB, principal),
   cmp: indexedDB.cmp
 });
-IDBTransaction = Ci.nsIIDBTransaction;
-IDBKeyRange = dbContext.IDBKeyRange;
+var IDBTransaction = Ci.nsIIDBTransaction;
+var IDBKeyRange = dbContext.IDBKeyRange;

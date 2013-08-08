@@ -1,5 +1,0 @@
-content pouchdb chrome/content/
-
-component {d647ff9b-ac4c-4d0e-8fbd-484765be5550} components/pouchDbHandler.js
-contract @pouchdb.com/component;1 {d647ff9b-ac4c-4d0e-8fbd-484765be5550}
-category profile-after-change pouchDbHandler @pouchdb.com/component;1

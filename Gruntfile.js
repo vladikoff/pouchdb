@@ -52,7 +52,7 @@ module.exports = function(grunt) {
     'copy': {
       firefox: {
         expand: true,
-        cwd: 'src/gecko/xpcom',
+        cwd: 'src/gecko/pouchdb',
         src: ['**'],
         dest: 'dist/gecko/pouchdb/'
       }
@@ -95,7 +95,7 @@ module.exports = function(grunt) {
           "src/deps/ajax.js",
           srcFiles
         ]),
-        dest: 'dist/gecko/pouchdb/chrome/content/pouchdb.jsm'
+        dest: 'dist/gecko/pouchdb/modules/pouchdb.jsm'
       },
       spatial: {
         src: grunt.util._.flatten([

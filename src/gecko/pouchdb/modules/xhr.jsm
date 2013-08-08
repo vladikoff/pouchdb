@@ -3,7 +3,7 @@ var exports = {};
 
 const {classes: Cc, interfaces: Ci, results: Cr, utils: Cu} = Components;
 // injects `memory`
-Cu.import("chrome://pouchdb/content/memory.jsm");
+Cu.import("resource:///modules/pouchdb/memory.jsm");
 
 var requests = [];
 

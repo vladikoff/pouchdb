@@ -1,6 +1,9 @@
+// TODO: These are just placeholders to get PouchDB working
+// This needs to be updated once we need full PouchDB support
 let window = {};
-// TODO
 window.addEventListener = function () {};
+let localStorage = {};
+
 const {classes: Cc, interfaces: Ci, results: Cr, utils: Cu} = Components;
 
 // set module exports for PouchDB export
@@ -16,18 +19,21 @@ if (typeof btoa === 'undefined') {
   let { atob, btoa } = Cu.import("resource://gre/modules/Services.jsm", {});
 }
 
+// Modules below come from the addon-sdk 1.14
+
 // imports `indexedDB`
-Cu.import("chrome://pouchdb/content/idb.jsm");
+Cu.import("resource:///modules/pouchdb/idb.jsm");
 window.indexedDB = indexedDB;
 window.IDBKeyRange = IDBKeyRange;
 
 if (typeof xhr === 'undefined') {
   // imports `xhr`
-  Cu.import("chrome://pouchdb/content/xhr.jsm");
+  Cu.import("resource:///modules/pouchdb/xhr.jsm");
+  // PouchDB checks for 'window.XMLHttpRequest'
   window.XMLHttpRequest = XMLHttpRequest;
 }
 
 if (typeof setTimeout === 'undefined') {
   // imports `setTimeout`, `clearTimeout`
-  Cu.import("chrome://pouchdb/content/timers.jsm");
+  Cu.import("resource:///modules/pouchdb/timers.jsm");
 }

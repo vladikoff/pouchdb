@@ -2,7 +2,7 @@ const {classes: Cc, interfaces: Ci, results: Cr, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("chrome://pouchdb/content/pouchdb.jsm");
+Cu.import("resource:///modules/pouchdb/pouchdb.jsm");
 
 function pouchDbHandler() {
   this.Pouch = Pouch;
@@ -16,6 +16,6 @@ pouchDbHandler.prototype = {
   QueryInterface:    XPCOMUtils.generateQI([Components.interfaces.nsIPouchDbHandler])
 };
 
-var NSGetFactory = XPCOMUtils.generateNSGetFactory([
+this.NSGetFactory = XPCOMUtils.generateNSGetFactory([
   pouchDbHandler
 ]);
